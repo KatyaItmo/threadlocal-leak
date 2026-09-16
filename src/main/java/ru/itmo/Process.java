@@ -8,14 +8,20 @@ import javax.ws.rs.core.Response;
 
 @Path("/process")
 public class Process {
-    private static final ThreadLocal<byte[]> threadMemory = new ThreadLocal<>();
+    private static final ThreadLocal<BigObject> threadMemory = new ThreadLocal<>();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response processData() {
-        byte[] data = new byte[10485760];
-        threadMemory.set(data);
+        try {
+            BigObject object = new BigObject();
+            threadMemory.set(object);
 
-        return Response.ok("{\"message\": \"processed\"}").build();
+            return Response.ok("{\"message\": \"processed\"}").build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            threadMemory.remove();
+        }
     }
 }
