@@ -13,15 +13,9 @@ public class Process {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response processData() {
-        try {
-            BigObject object = new BigObject();
-            threadMemory.set(object);
+        BigObject object = new BigObject();
+        threadMemory.set(object);
 
-            return Response.ok("{\"message\": \"processed\"}").build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            threadMemory.remove();
-        }
+        return Response.ok("{\"message\": \"processed\"}").build();
     }
 }
